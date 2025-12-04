@@ -1,9 +1,11 @@
-import { Controller, Inject, Get, Post, Body } from '@nestjs/common';
+import { Controller, Inject, Get, Post, Body, UseGuards } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { productsDto } from 'apps/products/src/products.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 
 @Controller('products')
+@UseGuards(JwtAuthGuard)
 export class ProductsController {
     constructor(@Inject('PRODUCTS_SERVICE') private readonly productsService: ClientProxy) { }
 

@@ -3,7 +3,8 @@
 This project consists of three parts that need to be running simultaneously:
 1. **Users Microservice** (Port 3002)
 2. **Products Microservice** (Port 3003)
-3. **API Gateway** (Port 3300)
+3. **Auth Microservice** (Port 3004)
+4. **API Gateway** (Port 3300)
 
 ## Prerequisites
 
@@ -28,7 +29,14 @@ npm run start:dev products
 ```
 *Wait for it to show "Nest application successfully started".*
 
-### Terminal 3: Start API Gateway
+### Terminal 3: Start Auth Service
+This service handles authentication.
+```bash
+npm run start:dev auth
+```
+*Wait for it to show "Nest application successfully started".*
+
+### Terminal 4: Start API Gateway
 This is the main entry point that you interact with.
 ```bash
 npm run start:dev
@@ -37,21 +45,30 @@ npm run start:dev
 
 ## Testing the Application
 
-Once all three services are running, you can test the endpoints using `curl` or Postman.
+Since the routes are now protected, you must login first to get a token.
+
+**1. Register a User:**
+```bash
+curl -X POST http://localhost:3300/auth/register -H "Content-Type: application/json" -d "{\"email\": \"test@example.com\", \"password\": \"password123\", \"name\": \"Test User\", \"age\": 30}"
+```
+
+**2. Login:**
+```bash
+curl -X POST http://localhost:3300/auth/login -H "Content-Type: application/json" -d "{\"email\": \"test@example.com\", \"password\": \"password123\"}"
+```
+*Copy the `access_token` from the response.*
+
+**3. Access Protected Routes:**
+Replace `<TOKEN>` with your actual access token.
 
 **Get All Users:**
 ```bash
-curl http://localhost:3300/users
-```
-
-**Add a User:**
-```bash
-curl -X POST http://localhost:3300/users -H "Content-Type: application/json" -d "{\"name\": \"New User\", \"age\": 25}"
+curl http://localhost:3300/users -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRldjEyM0BnbWFpbC5jb20iLCJpYXQiOjE3NjQ4NTI0NjksImV4cCI6MTc2NDg1NjA2OX0.tAXhV2OJFXjBLhJ6PO-lVmzi0HEcAfI4LgOkPVUtoCo"
 ```
 
 **Get All Products:**
 ```bash
-curl http://localhost:3300/products
+curl http://localhost:3300/products -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRldjEyM0BnbWFpbC5jb20iLCJpYXQiOjE3NjQ4NTI0NjksImV4cCI6MTc2NDg1NjA2OX0.tAXhV2OJFXjBLhJ6PO-lVmzi0HEcAfI4LgOkPVUtoCo"
 ```
 
 ## Troubleshooting

@@ -16,4 +16,9 @@ export class UsersController {
   addusers(usersDto: usersDto): Promise<usersDto> {
     return this.usersService.addusers(usersDto);
   }
+
+  @MessagePattern({ cmd: 'find_user_by_email' })
+  findOneByEmail(email: string) {
+    return this.usersService.findOneByEmail(email);
+  }
 }

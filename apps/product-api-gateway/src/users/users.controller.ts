@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 // import { UsersService } from 'apps/users/src/users.service';
 
 @Controller('users')
+@UseGuards(JwtAuthGuard)
 export class UsersController {
     constructor(@Inject('USERS_SERVICE') private readonly usersService: ClientProxy) { }
 

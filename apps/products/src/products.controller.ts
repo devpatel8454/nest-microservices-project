@@ -8,12 +8,12 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }
 
   @MessagePattern({ cmd: 'get_products' })
-  getproducts(): productsDto[] {
+  getproducts(): Promise<productsDto[]> {
     return this.productsService.findAll();
   }
 
   @MessagePattern({ cmd: 'add_products' })
-  addproducts(productsDto: productsDto) {
+  addproducts(productsDto: productsDto): Promise<productsDto> {
     return this.productsService.add_products(productsDto);
   }
 

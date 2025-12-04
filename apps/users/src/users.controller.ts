@@ -8,12 +8,12 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @MessagePattern({ cmd: 'get_users' })
-  getusers(): usersDto[] {
+  getusers(): Promise<usersDto[]> {
     return this.usersService.findAll();
   }
 
   @MessagePattern({ cmd: 'add_users' })
-  addusers(usersDto: usersDto) {
+  addusers(usersDto: usersDto): Promise<usersDto> {
     return this.usersService.addusers(usersDto);
   }
 }
